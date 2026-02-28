@@ -130,6 +130,38 @@
   .product-card:hover{transform:scale(1.03);border-color:rgba(232,160,64,.4)}
   .product-card::after{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.04) 50%,transparent 60%);transform:translateX(-100%);transition:transform .6s}
   .product-card:hover::after{transform:translateX(50%)}
+  /* Product Images Cinematic Look */
+  .product-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s ease;
+  }
+  .product-card:hover .product-img {
+    transform: scale(1.1);
+  }
+  .img-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, var(--rich) 0%, transparent 60%);
+    z-index: 1;
+  }
+  
+  /* Testimonial Section Cinematic Background */
+  .testimonial {
+    background: url('https://images.unsplash.com/photo-1511362623348-18e0013e8966?auto=format&fit=crop&w=1600&q=80') center/cover fixed;
+    position: relative;
+    text-align: center; 
+    padding: 150px 60px;
+    z-index: 1;
+  }
+  .testimonial::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, var(--dark) 0%, rgba(26,10,0,0.85) 50%, var(--dark) 100%);
+    z-index: -1;
+  }
   .product-visual{height:220px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:6rem;background:linear-gradient(135deg,rgba(45,18,0,.8),rgba(26,10,0,.5));transition:font-size .3s}
   .product-card:hover .product-visual{font-size:7rem}
   .product-visual::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,var(--rich),transparent)}
@@ -466,12 +498,12 @@
 
 <script>
 const products=[
-  {id:1,emoji:'🍫',name:'Dark Velvet Truffle',desc:'72% single-origin dark chocolate with silky ganache center and a hint of sea salt. Sourced from Ecuador\'s mist-covered hillsides.',price:549,badge:'Bestseller',flavors:['Dark 72%','Sea Salt','Ganache','Vegan']},
-  {id:2,emoji:'🎁',name:'Caramel Bloom',desc:'Milk chocolate shells filled with salted butter caramel made from scratch, daily. A love letter to sweetness with a touch of salt.',price:499,badge:'New',flavors:['Milk Chocolate','Salted Caramel','Butter','Signature']},
-  {id:3,emoji:'🌸',name:'White Jasmine Dream',desc:'Delicate white chocolate infused with real jasmine and lychee — a floral masterpiece that blooms in your mouth.',price:599,badge:'',flavors:['White Chocolate','Jasmine','Lychee','Floral']},
-  {id:4,emoji:'🌶️',name:'Mayan Spice Bar',desc:'Bold dark chocolate with cayenne, cinnamon and cardamom. An ancient recipe reimagined for the modern palate.',price:649,badge:'Limited',flavors:['Dark 85%','Cayenne','Cinnamon','Cardamom']},
-  {id:5,emoji:'🍓',name:'Berry Bliss Bonbon',desc:'Milk chocolate shells with strawberry-raspberry compote center. Fresh, fruity, and impossibly indulgent.',price:529,badge:'',flavors:['Milk Chocolate','Strawberry','Raspberry','Fresh Fruit']},
-  {id:6,emoji:'☕',name:'Espresso Noir',desc:'Intense dark chocolate infused with cold-brew espresso. For the coffee lover who deserves the finest of both worlds.',price:579,badge:'Popular',flavors:['Dark 70%','Cold Brew','Espresso','Bold']}
+  {id:1, image:'https://images.unsplash.com/photo-1549007994-cb92caebd54b?auto=format&fit=crop&w=600&q=80', name:'Dark Velvet Truffle', desc:'72% single-origin dark chocolate with silky ganache center and a hint of sea salt.', price:549, badge:'Bestseller', flavors:['Dark 72%','Sea Salt','Ganache','Vegan']},
+  {id:2, image:'https://images.unsplash.com/photo-1614088514115-41270bc70aeb?auto=format&fit=crop&w=600&q=80', name:'Caramel Bloom', desc:'Milk chocolate shells filled with salted butter caramel made from scratch, daily.', price:499, badge:'New', flavors:['Milk Chocolate','Salted Caramel','Butter','Signature']},
+  {id:3, image:'https://images.unsplash.com/photo-1570133288114-1e0388d227b4?auto=format&fit=crop&w=600&q=80', name:'White Jasmine Dream', desc:'Delicate white chocolate infused with real jasmine and lychee — a floral masterpiece.', price:599, badge:'', flavors:['White Chocolate','Jasmine','Lychee','Floral']},
+  {id:4, image:'https://images.unsplash.com/photo-1623658607185-3e284a194121?auto=format&fit=crop&w=600&q=80', name:'Mayan Spice Bar', desc:'Bold dark chocolate with cayenne, cinnamon and cardamom. An ancient recipe reimagined.', price:649, badge:'Limited', flavors:['Dark 85%','Cayenne','Cinnamon','Cardamom']},
+  {id:5, image:'https://images.unsplash.com/photo-1550246140-5119ae4790b8?auto=format&fit=crop&w=600&q=80', name:'Berry Bliss Bonbon', desc:'Milk chocolate shells with strawberry-raspberry compote center. Fresh and fruity.', price:529, badge:'', flavors:['Milk Chocolate','Strawberry','Raspberry','Fresh Fruit']},
+  {id:6, image:'https://images.unsplash.com/photo-1511381939415-e440c9c4fa3e?auto=format&fit=crop&w=600&q=80', name:'Espresso Noir', desc:'Intense dark chocolate infused with cold-brew espresso. For the coffee lover.', price:579, badge:'Popular', flavors:['Dark 70%','Cold Brew','Espresso','Bold']}
 ];
 let cart={},currentProduct=null,currentQty=1;
 
@@ -479,7 +511,10 @@ function renderProducts(){
   document.getElementById('productsGrid').innerHTML=products.map(p=>`
     <div class="product-card reveal" onclick="openModal(${p.id})" style="transition-delay:${(p.id-1)*.1}s">
       ${p.badge?`<div class="product-badge">${p.badge}</div>`:''}
-      <div class="product-visual">${p.emoji}</div>
+      <div class="product-visual">
+        <img src="${p.image}" alt="${p.name}" class="product-img">
+        <div class="img-overlay"></div>
+      </div>
       <div class="product-info">
         <h3>${p.name}</h3>
         <p>${p.desc.substring(0,75)}...</p>
@@ -642,6 +677,7 @@ renderProducts();
 </script>
 </body>
 </html
+
 
 
 
